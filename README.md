@@ -21,13 +21,13 @@ Application:
 * ButterKnife - view binding
 * Dagger 2 - dependency injection
 * RxJava, RxAndroid - reactive extensions for Android
-* Steho - debugging
+* Stetho - debugging
 * LeakCannary - detecting memory leaks
 
 Tests
 * JUnit - unit testing framework
 * Espresso - UI testing framework
-* Mockito - no explanation needed
+* Mockito - mocking framework for unit tests in Java
 * RESTMock - mocking network layer
 
 ## Building and running
