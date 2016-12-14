@@ -21,7 +21,7 @@ Application:
 * ButterKnife - view binding
 * Dagger 2 - dependency injection
 * RxJava, RxAndroid - reactive extensions for Android
-* Steho - debugging
+* Stetho - debugging
 * LeakCannary - detecting memory leaks
 
 Tests
