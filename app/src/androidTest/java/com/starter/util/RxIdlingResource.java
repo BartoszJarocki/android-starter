@@ -23,11 +23,6 @@ public class RxIdlingResource implements IdlingResource {
     }
 
     @Override
-    public boolean isIdleNow() {
-        return activeSubscriptionsCount.get() == 0;
-    }
-
-    @Override
     public void registerIdleTransitionCallback(ResourceCallback callback) {
         resourceCallback = callback;
     }
@@ -44,5 +39,10 @@ public class RxIdlingResource implements IdlingResource {
             Timber.i("There is no active subscriptions, transitioning to Idle");
             resourceCallback.onTransitionToIdle();
         }
+    }
+
+    @Override
+    public boolean isIdleNow() {
+        return activeSubscriptionsCount.get() == 0;
     }
 }

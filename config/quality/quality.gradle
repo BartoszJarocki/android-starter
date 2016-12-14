@@ -28,9 +28,13 @@ task checkstyle(type: Checkstyle, group: 'Verification', description: 'Runs code
     include '**/*.java'
 
     reports {
-        xml.enabled = true
+        xml.enabled = false
+        html.enabled = true
         xml {
             destination "$reportsDir/checkstyle/checkstyle.xml"
+        }
+        html {
+            destination "$reportsDir/checkstyle/checkstyle.html"
         }
     }
 
@@ -53,8 +57,8 @@ task findbugs(type: FindBugs,
     exclude '**/gen/**'
 
     reports {
-        xml.enabled = true
-        html.enabled = false
+        xml.enabled = false
+        html.enabled = true
         xml {
             destination "$reportsDir/findbugs/findbugs.xml"
         }

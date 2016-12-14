@@ -6,18 +6,18 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-abstract public class ListAdapter<ViewHolderType extends RecyclerView.ViewHolder, ModelType>
-    extends RecyclerView.Adapter<ViewHolderType> implements View.OnClickListener {
-    protected List<ModelType> dataList = new ArrayList<>();
-    protected OnRecyclerViewItemClickListener<ModelType> itemClickListener;
+abstract public class ListAdapter<V extends RecyclerView.ViewHolder, M>
+    extends RecyclerView.Adapter<V> implements View.OnClickListener {
+    protected List<M> dataList = new ArrayList<>();
+    protected OnRecyclerViewItemClickListener<M> itemClickListener;
 
-    public void add(ModelType dataItem, int pos) {
+    public void add(M dataItem, int pos) {
         dataList.add(pos, dataItem);
 
         notifyItemInserted(pos);
     }
 
-    public void update(ModelType dataItem) {
+    public void update(M dataItem) {
         int position = dataList.indexOf(dataItem);
 
         if (position != -1) {
@@ -27,19 +27,19 @@ abstract public class ListAdapter<ViewHolderType extends RecyclerView.ViewHolder
         }
     }
 
-    public void update(ModelType dataItem, int position) {
+    public void update(M dataItem, int position) {
         dataList.set(position, dataItem);
 
         notifyItemChanged(position);
     }
 
-    public void addAll(List<ModelType> dataList) {
+    public void addAll(List<M> dataList) {
         this.dataList = dataList;
 
         notifyDataSetChanged();
     }
 
-    public void remove(ModelType dataItem) {
+    public void remove(M dataItem) {
         int pos = dataList.indexOf(dataItem);
         boolean removed = dataList.remove(dataItem);
 
@@ -49,22 +49,22 @@ abstract public class ListAdapter<ViewHolderType extends RecyclerView.ViewHolder
     }
 
     @Override
-    abstract public ViewHolderType onCreateViewHolder(ViewGroup parent, int viewType);
+    abstract public V onCreateViewHolder(ViewGroup parent, int viewType);
 
-    public List<ModelType> getDataList() {
+    public List<M> getDataList() {
         return dataList;
     }
 
     @Override
     public void onClick(View view) {
         if (itemClickListener != null) {
-            ModelType model = (ModelType) view.getTag();
+            M model = (M) view.getTag();
 
             itemClickListener.onItemClick(view, model, dataList.indexOf(model));
         }
     }
 
-    public void setOnItemClickListener(OnRecyclerViewItemClickListener<ModelType> listener) {
+    public void setOnItemClickListener(OnRecyclerViewItemClickListener<M> listener) {
         this.itemClickListener = listener;
     }
 }

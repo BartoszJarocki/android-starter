@@ -48,12 +48,6 @@ public class ContributorsActivity extends MvpBaseActivity<ContributorsView, Cont
     private LinearLayoutManager layoutManager;
     private ContributorsAdapter adapter;
 
-    @NonNull
-    @Override
-    public ContributorsPresenter createPresenter() {
-        return new ContributorsPresenter(apiManager);
-    }
-
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         StarterApplication.get().getAppComponent().inject(this);
@@ -63,6 +57,12 @@ public class ContributorsActivity extends MvpBaseActivity<ContributorsView, Cont
         setSupportActionBar(toolbar);
 
         setupViews();
+    }
+
+    @NonNull
+    @Override
+    public ContributorsPresenter createPresenter() {
+        return new ContributorsPresenter(apiManager);
     }
 
     private void setupViews() {

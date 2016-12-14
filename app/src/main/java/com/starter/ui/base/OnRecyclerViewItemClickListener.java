@@ -2,6 +2,6 @@ package com.starter.ui.base;
 
 import android.view.View;
 
-public interface OnRecyclerViewItemClickListener<Model> {
-    void onItemClick(View view, Model model, int position);
+public interface OnRecyclerViewItemClickListener<M> {
+    void onItemClick(View view, M model, int position);
 }

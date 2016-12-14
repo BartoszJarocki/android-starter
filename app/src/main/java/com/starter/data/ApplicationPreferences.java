@@ -10,14 +10,4 @@ public class ApplicationPreferences {
     public ApplicationPreferences(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
     }
-
-    public boolean getSentGCMTokenToServer() {
-        return sharedPreferences.getBoolean(KEY_SENT_GCM_TOKEN_TO_SERVER, false);
-    }
-
-    public void setSentGCMTokenToServer(boolean sentTokenToServer) {
-        sharedPreferences.edit()
-            .putBoolean(KEY_SENT_GCM_TOKEN_TO_SERVER, sentTokenToServer)
-            .apply();
-    }
 }

@@ -23,8 +23,8 @@ public class ContributorsActivityTest {
     private static final String EMPTY_JSON = "empty_array.json";
     private static final String CONTRIBUTORS_ENDPOINT = "contributors";
 
-    @ClassRule static public DeviceAnimationTestRule
-        deviceAnimationTestRule = new DeviceAnimationTestRule();
+    @ClassRule static public DeviceAnimationTestRule deviceAnimationTestRule =
+        new DeviceAnimationTestRule();
 
     @Rule public ActivityTestRule<ContributorsActivity> rule =
         new ActivityTestRule<>(ContributorsActivity.class, true, false);

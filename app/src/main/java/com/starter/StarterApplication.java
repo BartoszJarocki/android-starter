@@ -1,5 +1,6 @@
 package com.starter;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.os.StrictMode;
@@ -13,6 +14,7 @@ import com.starter.network.di.NetModule;
 import timber.log.Timber;
 
 public class StarterApplication extends Application {
+    @SuppressLint("StaticFieldLeak")
     private static Context context;
 
     protected AppComponent appComponent;

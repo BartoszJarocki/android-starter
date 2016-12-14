@@ -41,13 +41,13 @@ public class ContributorsAdapter extends ListAdapter<ContributorsAdapter.ViewHol
         holder.itemView.setTag(contributor);
     }
 
+    public Contributor getItem(int position) {
+        return dataList.get(position);
+    }
+
     @Override
     public int getItemCount() {
         return dataList.size();
-    }
-
-    public Contributor getItem(int position) {
-        return dataList.get(position);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
