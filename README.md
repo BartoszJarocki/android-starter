@@ -42,6 +42,59 @@ To run **unit** tests:
 ./gradlew test
 ```
 
+Usually your presenters will execute asynchronous code. To make code synchronous for unit test purposes schedulers should be configurable See the code below:
+
+```
+public class ThreadConfiguration {
+    private Scheduler subscribeOnScheduler;
+    private Scheduler observeOnScheduler;
+
+    public ThreadConfiguration(final Scheduler subscribeOnScheduler,
+        final Scheduler observeOnScheduler) {
+        this.subscribeOnScheduler = subscribeOnScheduler;
+        this.observeOnScheduler = observeOnScheduler;
+    }
+
+    public <T> Observable.Transformer<T, T> applySchedulers() {
+        return observable -> observable.subscribeOn(subscribeOnScheduler)
+            .observeOn(observeOnScheduler);
+    }
+}
+```
+ThreadConfiguration should be used with compose operator from RxJava:
+```
+public class ApiManager {
+
+    private final ThreadConfiguration threadConfiguration;
+    private final Api api;
+
+    @Inject
+    public ApiManager(@NonNull Api api, @NonNull ThreadConfiguration threadConfiguration) {
+        this.api = api;
+        this.threadConfiguration = threadConfiguration;
+    }
+
+    public Observable<Response<List<Contributor>>> contributors(String owner, String repo) {
+        return api.contributors(owner, repo).compose(threadConfiguration.applySchedulers());
+    }
+}
+```
+Then in unit test it's possible to use the same thread for both subscribeOn and observeOn schedulers:
+```
+    ApiManager apiManager;
+    ThreadConfiguration threadConfiguration =
+        new ThreadConfiguration(Schedulers.immediate(), Schedulers.immediate());
+
+    @Before
+    public void before() {
+        MockitoAnnotations.initMocks(this);
+
+        apiManager = new ApiManager(api, threadConfiguration);
+    }
+    ...
+```
+And this will make your code synchronous.
+
 To run **functional** tests:
 ```
 ./gradlew connectedAndroidTest
