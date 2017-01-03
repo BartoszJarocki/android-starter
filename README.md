@@ -80,7 +80,7 @@ See the below diagram to get more details.
 
 ![MVP](/art/mvp.png)
 
-This application uses basic MVP setup. If you want to handle config changes (rotation etc.) you'll have to persist presenter instances. To read more about MVP I strongly recommend following the articles:
+This application uses basic MVP setup. If you want to handle config changes (rotation etc.) you'll have to persist presenter instances. To read more about MVP I strongly recommend the following articles:
 * [Mosby][5a0918ea]
 * [Introduction to MVP on Android][5cf2f9e8]
 * [Presentation Model and Passive View in MVP — The Android way][75fd7fde]
