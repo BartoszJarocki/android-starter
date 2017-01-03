@@ -58,6 +58,24 @@ public class ContributorsPresenterTest {
         verifyNoMoreInteractions(api);
     }
 
+    @Test
+    public void loadContributorsEmpty() throws Exception {
+        ContributorsPresenter contributorsPresenter = new ContributorsPresenter(apiManager);
+        contributorsPresenter.attachView(contributorsView);
+
+        when(api.contributors(OWNER, REPO)).thenReturn(
+            Observable.just(Response.success(new ArrayList<>())));
+
+        contributorsPresenter.loadContributors(OWNER, REPO, PULL_TO_REFRESH);
+
+        verify(contributorsView).showProgress(PULL_TO_REFRESH);
+        verify(api).contributors(OWNER, REPO);
+        verify(contributorsView).showEmpty();
+
+        verifyNoMoreInteractions(contributorsView);
+        verifyNoMoreInteractions(api);
+    }
+
     List<Contributor> getContributors() {
         List<Contributor> contributors = new ArrayList<>();
         contributors.add(new Contributor("testuser", 12, "avatar_url"));
