@@ -37,7 +37,7 @@ From the root of the project run:
 ```
 
 ## Tests
-To run **unit** tests:
+* To run **unit** tests:
 ```
 ./gradlew test
 ```
@@ -95,7 +95,7 @@ Then in unit test it's possible to use the same thread for both subscribeOn and 
 ```
 And this will make your code synchronous.
 
-To run **functional** tests:
+* To run **functional** tests:
 ```
 ./gradlew connectedAndroidTest
 ```
