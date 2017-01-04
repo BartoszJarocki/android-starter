@@ -1,5 +1,7 @@
 package com.starter.ui.contributors;
 
+import com.starter.data.AppRepository;
+import com.starter.data.local.LocalRepository;
 import com.starter.data.model.Contributor;
 import com.starter.data.remote.GithubApi;
 import com.starter.data.remote.RemoteRepository;
@@ -27,7 +29,10 @@ public class ContributorsPresenterTest {
     @Mock ContributorsView contributorsView;
     @Mock GithubApi githubApi;
 
+    LocalRepository localRepository;
     RemoteRepository remoteRepository;
+
+    AppRepository appRepository;
     ThreadConfiguration threadConfiguration =
         new ThreadConfiguration(Schedulers.immediate(), Schedulers.immediate());
 
@@ -35,12 +40,14 @@ public class ContributorsPresenterTest {
     public void before() {
         MockitoAnnotations.initMocks(this);
 
+        localRepository = new LocalRepository();
         remoteRepository = new RemoteRepository(githubApi, threadConfiguration);
+        appRepository = new AppRepository(localRepository, remoteRepository);
     }
 
     @Test
     public void loadContributors() throws Exception {
-        ContributorsPresenter contributorsPresenter = new ContributorsPresenter(remoteRepository);
+        ContributorsPresenter contributorsPresenter = new ContributorsPresenter(appRepository);
         contributorsPresenter.attachView(contributorsView);
 
         List<Contributor> contributors = getContributors();
@@ -60,7 +67,7 @@ public class ContributorsPresenterTest {
 
     @Test
     public void loadContributorsEmpty() throws Exception {
-        ContributorsPresenter contributorsPresenter = new ContributorsPresenter(remoteRepository);
+        ContributorsPresenter contributorsPresenter = new ContributorsPresenter(appRepository);
         contributorsPresenter.attachView(contributorsView);
 
         when(githubApi.contributors(OWNER, REPO)).thenReturn(
