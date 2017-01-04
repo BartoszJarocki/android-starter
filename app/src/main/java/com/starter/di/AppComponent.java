@@ -2,14 +2,13 @@ package com.starter.di;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import com.starter.network.di.ApiModule;
-import com.starter.network.di.NetModule;
+import com.starter.data.di.DataModule;
 import com.starter.ui.contributors.ContributorsActivity;
 import dagger.Component;
 import javax.inject.Singleton;
 
 @Singleton
-@Component(modules = { AppModule.class, NetModule.class, ApiModule.class })
+@Component(modules = { AppModule.class, DataModule.class })
 public interface AppComponent {
 
     Application getApplication();

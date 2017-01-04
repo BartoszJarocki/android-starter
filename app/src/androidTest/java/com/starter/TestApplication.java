@@ -2,8 +2,8 @@ package com.starter;
 
 import com.starter.di.AppModule;
 import com.starter.di.DaggerAppComponent;
-import com.starter.network.di.ApiModule;
-import com.starter.network.di.NetModule;
+import com.starter.data.di.ApiModule;
+import com.starter.data.di.NetModule;
 import io.appflate.restmock.RESTMockServer;
 
 public class TestApplication extends StarterApplication {

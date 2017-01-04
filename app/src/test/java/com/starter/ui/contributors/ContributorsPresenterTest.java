@@ -1,8 +1,8 @@
 package com.starter.ui.contributors;
 
 import com.starter.data.model.Contributor;
-import com.starter.network.Api;
-import com.starter.network.ApiManager;
+import com.starter.data.remote.GithubApi;
+import com.starter.data.remote.RemoteRepository;
 import com.starter.utils.ThreadConfiguration;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +25,9 @@ public class ContributorsPresenterTest {
     private static final boolean PULL_TO_REFRESH = false;
 
     @Mock ContributorsView contributorsView;
-    @Mock Api api;
+    @Mock GithubApi githubApi;
 
-    ApiManager apiManager;
+    RemoteRepository remoteRepository;
     ThreadConfiguration threadConfiguration =
         new ThreadConfiguration(Schedulers.immediate(), Schedulers.immediate());
 
@@ -35,45 +35,45 @@ public class ContributorsPresenterTest {
     public void before() {
         MockitoAnnotations.initMocks(this);
 
-        apiManager = new ApiManager(api, threadConfiguration);
+        remoteRepository = new RemoteRepository(githubApi, threadConfiguration);
     }
 
     @Test
     public void loadContributors() throws Exception {
-        ContributorsPresenter contributorsPresenter = new ContributorsPresenter(apiManager);
+        ContributorsPresenter contributorsPresenter = new ContributorsPresenter(remoteRepository);
         contributorsPresenter.attachView(contributorsView);
 
         List<Contributor> contributors = getContributors();
 
-        when(api.contributors(OWNER, REPO)).thenReturn(
+        when(githubApi.contributors(OWNER, REPO)).thenReturn(
             Observable.just(Response.success(contributors)));
 
         contributorsPresenter.loadContributors(OWNER, REPO, PULL_TO_REFRESH);
 
         verify(contributorsView).showProgress(PULL_TO_REFRESH);
-        verify(api).contributors(OWNER, REPO);
+        verify(githubApi).contributors(OWNER, REPO);
         verify(contributorsView).showContributors(contributors);
 
         verifyNoMoreInteractions(contributorsView);
-        verifyNoMoreInteractions(api);
+        verifyNoMoreInteractions(githubApi);
     }
 
     @Test
     public void loadContributorsEmpty() throws Exception {
-        ContributorsPresenter contributorsPresenter = new ContributorsPresenter(apiManager);
+        ContributorsPresenter contributorsPresenter = new ContributorsPresenter(remoteRepository);
         contributorsPresenter.attachView(contributorsView);
 
-        when(api.contributors(OWNER, REPO)).thenReturn(
+        when(githubApi.contributors(OWNER, REPO)).thenReturn(
             Observable.just(Response.success(new ArrayList<>())));
 
         contributorsPresenter.loadContributors(OWNER, REPO, PULL_TO_REFRESH);
 
         verify(contributorsView).showProgress(PULL_TO_REFRESH);
-        verify(api).contributors(OWNER, REPO);
+        verify(githubApi).contributors(OWNER, REPO);
         verify(contributorsView).showEmpty();
 
         verifyNoMoreInteractions(contributorsView);
-        verifyNoMoreInteractions(api);
+        verifyNoMoreInteractions(githubApi);
     }
 
     List<Contributor> getContributors() {

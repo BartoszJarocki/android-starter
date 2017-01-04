@@ -1,7 +1,7 @@
 package com.starter.ui.contributors;
 
+import com.starter.data.AppRepository;
 import com.starter.data.model.Contributor;
-import com.starter.network.ApiManager;
 import com.starter.ui.base.mvp.core.MvpBasePresenter;
 import java.util.List;
 import retrofit2.Response;
@@ -10,11 +10,11 @@ import rx.Subscription;
 import timber.log.Timber;
 
 public class ContributorsPresenter extends MvpBasePresenter<ContributorsView> {
-    private ApiManager apiManager;
+    private AppRepository appRepository;
     private Subscription subscription;
 
-    public ContributorsPresenter(final ApiManager apiManager) {
-        this.apiManager = apiManager;
+    public ContributorsPresenter(final AppRepository appRepository) {
+        this.appRepository = appRepository;
     }
 
     public void loadContributors(String owner, String repo, boolean pullToRefresh) {
@@ -22,7 +22,7 @@ public class ContributorsPresenter extends MvpBasePresenter<ContributorsView> {
             getView().showProgress(pullToRefresh);
         }
 
-        subscription = apiManager.contributors(owner, repo)
+        subscription = appRepository.contributors(owner, repo)
             .subscribe(new Subscriber<Response<List<Contributor>>>() {
                 @Override
                 public void onCompleted() {

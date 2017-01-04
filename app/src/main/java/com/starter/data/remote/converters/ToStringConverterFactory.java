@@ -1,4 +1,4 @@
-package com.starter.network.converters;
+package com.starter.data.remote.converters;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;

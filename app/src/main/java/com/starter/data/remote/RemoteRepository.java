@@ -1,4 +1,4 @@
-package com.starter.network;
+package com.starter.data.remote;
 
 import android.support.annotation.NonNull;
 import com.starter.data.model.Contributor;
@@ -8,18 +8,18 @@ import javax.inject.Inject;
 import retrofit2.Response;
 import rx.Observable;
 
-public class ApiManager {
+public class RemoteRepository {
 
     private final ThreadConfiguration threadConfiguration;
-    private final Api api;
+    private final GithubApi githubApi;
 
     @Inject
-    public ApiManager(@NonNull Api api, @NonNull ThreadConfiguration threadConfiguration) {
-        this.api = api;
+    public RemoteRepository(@NonNull GithubApi githubApi, @NonNull ThreadConfiguration threadConfiguration) {
+        this.githubApi = githubApi;
         this.threadConfiguration = threadConfiguration;
     }
 
     public Observable<Response<List<Contributor>>> contributors(String owner, String repo) {
-        return api.contributors(owner, repo).compose(threadConfiguration.applySchedulers());
+        return githubApi.contributors(owner, repo).compose(threadConfiguration.applySchedulers());
     }
 }

@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
-import com.starter.data.ApplicationPreferences;
+import com.starter.data.preferences.ApplicationPreferences;
 import com.starter.utils.ThreadConfiguration;
 import dagger.Module;
 import dagger.Provides;
