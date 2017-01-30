@@ -23,6 +23,7 @@ Application:
 * RxJava, RxAndroid - reactive extensions for Android
 * Stetho - debugging
 * LeakCannary - detecting memory leaks
+* ObjectBox - data persistence 
 
 Tests
 * JUnit - unit testing framework
