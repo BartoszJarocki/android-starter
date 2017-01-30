@@ -40,8 +40,8 @@ public class ContributorsPresenterTest {
     public void before() {
         MockitoAnnotations.initMocks(this);
 
-        localRepository = new LocalRepository();
-        remoteRepository = new RemoteRepository(githubApi, threadConfiguration);
+        localRepository = new LocalRepository(localContributorBox, threadConfiguration);
+        remoteRepository = new RemoteRepository(localContributorBox, localRepository, githubApi, threadConfiguration);
         appRepository = new AppRepository(localRepository, remoteRepository);
     }
 

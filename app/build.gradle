@@ -3,6 +3,7 @@ apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'android-git-sha'
 apply from: '../config/quality/quality.gradle'
+apply plugin: 'io.objectbox'
 
 def versionMajor = 0
 def versionMinor = 0
@@ -146,4 +147,6 @@ dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+
+    compile 'io.objectbox:objectbox-android:0.9.6'
 }

@@ -1,29 +1,20 @@
-package com.starter.data.model;
+package com.starter.data.remote.model;
 
-import com.starter.data.local.model.ContributorEntity;
-import com.starter.data.remote.model.ContributorJson;
+import com.google.gson.annotations.SerializedName;
 
-public final class Contributor {
-    private final String login;
-    private final int contributions;
-    private final String avatarUrl;
+public final class ContributorJson {
+    private static final String LOGIN = "login";
+    private static final String CONTRIBUTIONS = "contributions";
+    private static final String AVATAR_URL = "avatar_url";
 
-    public Contributor(final String login, final int contributions, final String avatarUrl) {
+    @SerializedName(LOGIN) public final String login;
+    @SerializedName(CONTRIBUTIONS) public final int contributions;
+    @SerializedName(AVATAR_URL) public final String avatarUrl;
+
+    public ContributorJson(final String login, final int contributions, final String avatarUrl) {
         this.login = login;
         this.contributions = contributions;
         this.avatarUrl = avatarUrl;
-    }
-
-    public Contributor(final ContributorJson contributorJson) {
-        this.login = contributorJson.getLogin();
-        this.contributions = contributorJson.getContributions();
-        this.avatarUrl = contributorJson.getAvatarUrl();
-    }
-
-    public Contributor(final ContributorEntity contributorEntity) {
-        this.login = contributorEntity.getLogin();
-        this.contributions = contributorEntity.getContributions();
-        this.avatarUrl = contributorEntity.getAvatarUrl();
     }
 
     @Override
@@ -31,7 +22,7 @@ public final class Contributor {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        final Contributor that = (Contributor) o;
+        final ContributorJson that = (ContributorJson) o;
 
         if (contributions != that.contributions) return false;
         if (login != null ? !login.equals(that.login) : that.login != null) return false;

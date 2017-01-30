@@ -1,9 +1,8 @@
 package com.starter;
 
+import com.starter.data.di.DataModule;
 import com.starter.di.AppModule;
 import com.starter.di.DaggerAppComponent;
-import com.starter.data.di.ApiModule;
-import com.starter.data.di.NetModule;
 import io.appflate.restmock.RESTMockServer;
 
 public class TestApplication extends StarterApplication {
@@ -15,8 +14,7 @@ public class TestApplication extends StarterApplication {
         appModule = new AppModule(this);
         appComponent = DaggerAppComponent.builder()
             .appModule(appModule)
-            .netModule(new NetModule(RESTMockServer.getUrl()))
-            .apiModule(new ApiModule())
+            .dataModule(new DataModule(RESTMockServer.getUrl()))
             .build();
 
         appComponent.inject(this);

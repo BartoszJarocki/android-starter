@@ -41,7 +41,7 @@ public class AppModule {
         httpBuilder.cache(new Cache(cacheDir, IMAGE_DISK_CACHE_SIZE));
         final OkHttp3Downloader okHttpDownloader = new OkHttp3Downloader(httpBuilder.build());
 
-        return new Picasso.Builder(app).downloader(okHttpDownloader).build();
+        return new Picasso.Builder(app).downloader(okHttpDownloader).indicatorsEnabled(true).build();
     }
 
     @Provides

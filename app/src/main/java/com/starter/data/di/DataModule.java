@@ -8,12 +8,16 @@ import com.google.gson.GsonBuilder;
 import com.starter.BuildConfig;
 import com.starter.data.AppRepository;
 import com.starter.data.local.LocalRepository;
+import com.starter.data.local.model.ContributorEntity;
+import com.starter.data.local.model.MyObjectBox;
 import com.starter.data.remote.GithubApi;
 import com.starter.data.remote.RemoteRepository;
 import com.starter.data.remote.converters.ToStringConverterFactory;
 import com.starter.utils.ThreadConfiguration;
 import dagger.Module;
 import dagger.Provides;
+import io.objectbox.Box;
+import io.objectbox.BoxStore;
 import java.io.File;
 import javax.inject.Singleton;
 import okhttp3.Cache;
@@ -79,6 +83,18 @@ public class DataModule {
 
     @Provides
     @Singleton
+    public BoxStore providesObjectBox(Application application) {
+        return MyObjectBox.builder().androidContext(application).build();
+    }
+
+    @Provides
+    @Singleton
+    public Box<ContributorEntity> providesContributorsObjectBox(BoxStore boxStore) {
+        return boxStore.boxFor(ContributorEntity.class);
+    }
+
+    @Provides
+    @Singleton
     public GithubApi providesGithubApi(Retrofit retrofit) {
         return retrofit.create(GithubApi.class);
     }
@@ -86,14 +102,16 @@ public class DataModule {
     @Provides
     @NonNull
     @Singleton
-    public LocalRepository provideAppLocalDataStore() {
-        return new LocalRepository();
+    public LocalRepository providesLocalRepository(Box<ContributorEntity> localContributorBox,
+        ThreadConfiguration threadConfiguration) {
+        return new LocalRepository(localContributorBox, threadConfiguration);
     }
 
     @Provides
     @Singleton
-    public RemoteRepository providesApiManager(GithubApi githubApi, ThreadConfiguration threadConfiguration) {
-        return new RemoteRepository(githubApi, threadConfiguration);
+    public RemoteRepository providesRemoteRepository(LocalRepository localRepository,
+        GithubApi githubApi, ThreadConfiguration threadConfiguration) {
+        return new RemoteRepository(localRepository, githubApi, threadConfiguration);
     }
 
     @Provides

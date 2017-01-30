@@ -5,7 +5,6 @@ import com.starter.data.model.Contributor;
 import com.starter.data.remote.RemoteRepository;
 import java.util.List;
 import javax.inject.Inject;
-import retrofit2.Response;
 import rx.Observable;
 
 public class AppRepository implements Repository {
@@ -21,10 +20,9 @@ public class AppRepository implements Repository {
     }
 
     @Override
-    public Observable<Response<List<Contributor>>> contributors(final String owner,
-        final String repo) {
-        return Observable.concat(localRepository.contributors(owner, repo),
-            remoteRepository.contributors(owner, repo))
-            .first(contributorsResponse -> contributorsResponse != null);
+    public Observable<List<Contributor>> contributors(final String owner, final String repo) {
+        return Observable.concat(remoteRepository.contributors(owner, repo),
+            localRepository.contributors(owner, repo))
+            .first(contributorsResponse -> !contributorsResponse.isEmpty());
     }
 }

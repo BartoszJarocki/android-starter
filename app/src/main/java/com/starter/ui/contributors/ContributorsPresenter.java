@@ -4,7 +4,6 @@ import com.starter.data.AppRepository;
 import com.starter.data.model.Contributor;
 import com.starter.ui.base.mvp.core.MvpBasePresenter;
 import java.util.List;
-import retrofit2.Response;
 import rx.Subscriber;
 import rx.Subscription;
 import timber.log.Timber;
@@ -22,8 +21,8 @@ public class ContributorsPresenter extends MvpBasePresenter<ContributorsView> {
             getView().showProgress(pullToRefresh);
         }
 
-        subscription = appRepository.contributors(owner, repo)
-            .subscribe(new Subscriber<Response<List<Contributor>>>() {
+        subscription =
+            appRepository.contributors(owner, repo).subscribe(new Subscriber<List<Contributor>>() {
                 @Override
                 public void onCompleted() {
                     Timber.d("Finished loading contributors.");
@@ -37,20 +36,13 @@ public class ContributorsPresenter extends MvpBasePresenter<ContributorsView> {
                 }
 
                 @Override
-                public void onNext(final Response<List<Contributor>> listResponse) {
+                public void onNext(final List<Contributor> contributors) {
                     if (!isViewAttached()) {
                         return;
                     }
 
-                    if (!listResponse.isSuccessful()) {
-                        getView().showError("Something went wrong...");
-
-                        return;
-                    }
-
-                    List<Contributor> contributors = listResponse.body();
                     if (contributors != null && !contributors.isEmpty()) {
-                        getView().showContributors(listResponse.body());
+                        getView().showContributors(contributors);
                     } else {
                         getView().showEmpty();
                     }
