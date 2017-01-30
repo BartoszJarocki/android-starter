@@ -100,10 +100,6 @@ If you want to start a new project based on this boilerplate do the following st
 * Init a new git repository
 * Make sure you want all the dependencies included in this boilerplate
 
-## TODO
-* Add persistence layer
-* Add Travis CI config
-
 ## License
 ```
 Copyright 2016 Bartosz Jarocki
