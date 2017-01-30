@@ -66,11 +66,11 @@ public class ContributorsAdapter extends ListAdapter<ContributorsAdapter.ViewHol
             ButterKnife.bind(this, view);
         }
 
-        public void bindData(final Contributor model) {
-            textName.setText(model.login);
-            textDesc.setText(String.format(contributionsFormat, model.contributions));
+        public void bindData(final Contributor contributor) {
+            textName.setText(contributor.getLogin());
+            textDesc.setText(String.format(contributionsFormat, contributor.getContributions()));
 
-            picasso.load(model.avatarUrl).into(imageAvatar);
+            picasso.load(contributor.getAvatarUrl()).into(imageAvatar);
         }
     }
 }

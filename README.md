@@ -23,6 +23,7 @@ Application:
 * RxJava, RxAndroid - reactive extensions for Android
 * Stetho - debugging
 * LeakCannary - detecting memory leaks
+* ObjectBox - data persistence 
 
 Tests
 * JUnit - unit testing framework
@@ -152,10 +153,6 @@ If you want to start a new project based on this boilerplate do the following st
   * Rename package name in ```src/main/AndroidManifest.xml``` and ```src/androidTest/AndroidManifest.xml```
 * Init a new git repository
 * Make sure you want all the dependencies included in this boilerplate
-
-## TODO
-* Add persistence layer
-* Add Travis CI config
 
 ## License
 ```

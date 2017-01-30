@@ -1,4 +1,4 @@
-package com.starter.data;
+package com.starter.data.preferences;
 
 import android.content.SharedPreferences;
 

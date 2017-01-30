@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
-import com.starter.data.ApplicationPreferences;
+import com.starter.data.preferences.ApplicationPreferences;
 import com.starter.utils.ThreadConfiguration;
 import dagger.Module;
 import dagger.Provides;
@@ -41,7 +41,7 @@ public class AppModule {
         httpBuilder.cache(new Cache(cacheDir, IMAGE_DISK_CACHE_SIZE));
         final OkHttp3Downloader okHttpDownloader = new OkHttp3Downloader(httpBuilder.build());
 
-        return new Picasso.Builder(app).downloader(okHttpDownloader).build();
+        return new Picasso.Builder(app).downloader(okHttpDownloader).indicatorsEnabled(true).build();
     }
 
     @Provides

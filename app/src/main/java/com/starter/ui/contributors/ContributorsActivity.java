@@ -19,8 +19,8 @@ import butterknife.ButterKnife;
 import com.squareup.picasso.Picasso;
 import com.starter.R;
 import com.starter.StarterApplication;
+import com.starter.data.AppRepository;
 import com.starter.data.model.Contributor;
-import com.starter.network.ApiManager;
 import com.starter.ui.base.OnRecyclerViewItemClickListener;
 import com.starter.ui.base.mvp.MvpBaseActivity;
 import com.starter.ui.common.widget.BetterViewAnimator;
@@ -30,7 +30,7 @@ import javax.inject.Inject;
 public class ContributorsActivity extends MvpBaseActivity<ContributorsView, ContributorsPresenter>
     implements ContributorsView, OnRecyclerViewItemClickListener<Contributor> {
 
-    @Inject ApiManager apiManager;
+    @Inject AppRepository appRepository;
     @Inject Picasso picasso;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -62,23 +62,7 @@ public class ContributorsActivity extends MvpBaseActivity<ContributorsView, Cont
     @NonNull
     @Override
     public ContributorsPresenter createPresenter() {
-        return new ContributorsPresenter(apiManager);
-    }
-
-    private void setupViews() {
-        layoutManager = new LinearLayoutManager(this);
-        adapter = new ContributorsAdapter(picasso);
-        adapter.setOnItemClickListener(this);
-
-        recyclerView.addItemDecoration(
-            new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
-        presenter.loadContributors("square", "retrofit", false);
-
-        swipeToRefreshView.setOnRefreshListener(
-            () -> presenter.loadContributors("square", "retrofit", true));
+        return new ContributorsPresenter(appRepository);
     }
 
     @Override
@@ -112,5 +96,21 @@ public class ContributorsActivity extends MvpBaseActivity<ContributorsView, Cont
     @Override
     public void onItemClick(final View view, final Contributor contributor, final int position) {
 
+    }
+
+    private void setupViews() {
+        layoutManager = new LinearLayoutManager(this);
+        adapter = new ContributorsAdapter(picasso);
+        adapter.setOnItemClickListener(this);
+
+        recyclerView.addItemDecoration(
+            new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+        presenter.loadContributors("square", "retrofit", false);
+
+        swipeToRefreshView.setOnRefreshListener(
+            () -> presenter.loadContributors("square", "retrofit", true));
     }
 }

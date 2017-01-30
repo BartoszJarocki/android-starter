@@ -6,11 +6,10 @@ import android.content.Context;
 import android.os.StrictMode;
 import android.util.Log;
 import com.squareup.leakcanary.LeakCanary;
+import com.starter.data.di.DataModule;
 import com.starter.di.AppComponent;
 import com.starter.di.AppModule;
 import com.starter.di.DaggerAppComponent;
-import com.starter.network.di.ApiModule;
-import com.starter.network.di.NetModule;
 import timber.log.Timber;
 
 public class StarterApplication extends Application {
@@ -48,8 +47,7 @@ public class StarterApplication extends Application {
         appModule = new AppModule(this);
         appComponent = DaggerAppComponent.builder()
             .appModule(appModule)
-            .netModule(new NetModule(BuildConfig.API_BASE_URL))
-            .apiModule(new ApiModule())
+            .dataModule(new DataModule(BuildConfig.API_BASE_URL))
             .build();
 
         appComponent.inject(this);
