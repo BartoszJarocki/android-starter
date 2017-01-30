@@ -142,6 +142,104 @@ This application uses basic MVP setup. If you want to handle config changes (rot
   [5a0918ea]: http://hannesdorfmann.com/mosby/mvp/ "MOSBY MVP"
   [5cf2f9e8]: https://github.com/konmik/konmik.github.io/wiki/Introduction-to-Model-View-Presenter-on-Android "Introduction to MVP on Android"
   [75fd7fde]: https://medium.com/@andrzejchm/presentation-model-and-passive-view-in-mvp-the-android-way-fdba56a35b1e#.s82zxg66f "Presentation Model and Passive View in MVP — The Android way"
+  
+## Offline
+Everytime data is fetched from API it is also saved in local database (currently ObjectBox). In case of no internet connection local data will be displayed. Application uses repository pattern to achieve this behavior.
+
+```java
+public class AppRepository implements Repository {
+
+    private final LocalRepository localRepository;
+    private final RemoteRepository remoteRepository;
+
+    @Inject
+    public AppRepository(final LocalRepository localRepository,
+        final RemoteRepository remoteRepository) {
+        this.localRepository = localRepository;
+        this.remoteRepository = remoteRepository;
+    }
+
+    @Override
+    public Observable<List<Contributor>> contributors(final String owner, final String repo) {
+        return Observable.concat(remoteRepository.contributors(owner, repo),
+            localRepository.contributors(owner, repo))
+            .first(contributorsResponse -> !contributorsResponse.isEmpty());
+    }
+}
+```
+
+```java
+public class RemoteRepository implements Repository {
+
+    private final LocalRepository localRepository;
+    private final ThreadConfiguration threadConfiguration;
+    private final GithubApi githubApi;
+    private final ContributorsJsonsToContributorListMapper
+        contributorsJsonsToContributorListMapper = new ContributorsJsonsToContributorListMapper();
+
+    @Inject
+    public RemoteRepository(final LocalRepository localRepository, @NonNull GithubApi githubApi,
+        @NonNull ThreadConfiguration threadConfiguration) {
+        this.localRepository = localRepository;
+        this.githubApi = githubApi;
+        this.threadConfiguration = threadConfiguration;
+    }
+
+    public Observable<List<Contributor>> contributors(String owner, String repo) {
+        return githubApi.contributors(owner, repo)
+            .flatMap(response -> {
+                if (response.isSuccessful()) {
+                    return Observable.just(response.body());
+                } else {
+                    return Observable.error(new RuntimeException());
+                }
+            })
+            .doOnNext(localRepository::put)
+            .flatMap(contributors -> Observable.just(
+                contributorsJsonsToContributorListMapper.map(contributors)))
+            .onErrorResumeNext(throwable -> {
+                if (throwable instanceof IOException) { // network errors
+                    return Observable.empty(); // show local data!
+                }
+
+                return Observable.error(throwable);
+            })
+            .compose(threadConfiguration.applySchedulers());
+    }
+}
+```
+
+```java
+public class LocalRepository implements Repository {
+    private final Box<ContributorEntity> localContributorBox;
+    private final ThreadConfiguration threadConfiguration;
+    private final ContributorsJsonsToContributorEntitiesMapper
+        contributorsJsonsToContributorEntitiesMapper =
+        new ContributorsJsonsToContributorEntitiesMapper();
+    private final ContributorsEntitiesToContributorsMapper entitiesToContributorsMapper =
+        new ContributorsEntitiesToContributorsMapper();
+
+    public LocalRepository(final Box<ContributorEntity> localContributorBox,
+        final ThreadConfiguration threadConfiguration) {
+        this.localContributorBox = localContributorBox;
+        this.threadConfiguration = threadConfiguration;
+    }
+
+    @Override
+    public Observable<List<Contributor>> contributors(final String owner, final String repo) {
+        localContributorBox.removeAll();
+
+        return Observable.defer(() -> Observable.just(localContributorBox.getAll()))
+            .flatMap(contributorEntities -> Observable.just(
+                entitiesToContributorsMapper.map(contributorEntities)))
+            .compose(threadConfiguration.applySchedulers());
+    }
+
+    public void put(final List<ContributorJson> contributorJsons) {
+        localContributorBox.put(contributorsJsonsToContributorEntitiesMapper.map(contributorJsons));
+    }
+}
+```
 
 
 ## Project setup
