@@ -45,7 +45,7 @@ From the root of the project run:
 
 Usually your presenters will execute asynchronous code. To make code synchronous for unit test purposes schedulers should be configurable See the code below:
 
-```
+```java
 public class ThreadConfiguration {
     private Scheduler subscribeOnScheduler;
     private Scheduler observeOnScheduler;
@@ -63,7 +63,7 @@ public class ThreadConfiguration {
 }
 ```
 ThreadConfiguration should be used with compose operator from RxJava:
-```
+```java
 public class ApiManager {
 
     private final ThreadConfiguration threadConfiguration;
@@ -81,7 +81,7 @@ public class ApiManager {
 }
 ```
 Then in unit test it's possible to use the same thread for both subscribeOn and observeOn schedulers:
-```
+```java
     ApiManager apiManager;
     ThreadConfiguration threadConfiguration =
         new ThreadConfiguration(Schedulers.immediate(), Schedulers.immediate());
